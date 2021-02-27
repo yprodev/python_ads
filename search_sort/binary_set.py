@@ -41,6 +41,42 @@ class Set:
 					return False
 			return True
 
+	# This is the modified version of the mergeSoretedList function
+	# Implementing Set Union
+	def union(self, setB):
+		newSet = Set()
+		a = 0
+		b = 0
+
+		# Merge the two lists together until one is empty
+		while a < len(self) and b < len(setB):
+			valueA = self._theElements[a]
+			valueB = setB._theElements[b]
+
+			if valueA < valueB:
+				newSet._theElements.append(valueA)
+				a += 1
+			elif valueA > valueB:
+				newSet._theElements.append(valueB)
+				b += 1
+			else:
+				newSet._theElements.append(valueA)
+				a += 1
+				b += 1
+
+		# If listA contains more items, append them to newList
+		while a < len(self):
+			newSet._theElements.append(self._theElements[a])
+			a += 1
+
+		# Or if listB contains more, append them to newList
+		while b < len(setB):
+			newSet._theElements.append(setB._theElements[b])
+			b += 1
+
+		return newSet
+
+
 	# The remaining methods go here
 	# .....
 
