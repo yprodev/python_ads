@@ -26,11 +26,20 @@ class Set:
 		self._theElements.pop(ndx)
 
 	# Determines if this set is a subset of setB
-	def isSubsetOf(self, setB):
+	def isSubsetOf(self, setB): # O(n log n)
 		for element in self:
 			if element not in setB:
 				return False
 		return True
+
+	def __eq__(self, setB): # O(n) - optimised in comparison to isSubsetOf method
+		if len(self) != len(setB):
+			return False
+		else:
+			for in in range(len(self)):
+				if self._theElements[i] != setB._theElements[i]:
+					return False
+			return True
 
 	# The remaining methods go here
 	# .....
