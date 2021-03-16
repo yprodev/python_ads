@@ -34,6 +34,15 @@ class BSTMap:
 		else: # Base case
 			return subtree
 
+	# Helper method for finding the node containing the minimum key
+	def _bstMinimum(self, subtree):
+		if subtree is None:
+			return None
+		elif subtree.left is None:
+			return subtree
+		else:
+			return self._bstMinimum(subtree.left)
+
 
 # Storage class for the binary search tree nodes of the map
 class _BSTMapNode:
