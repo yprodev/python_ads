@@ -43,6 +43,31 @@ class BSTMap:
 		else:
 			return self._bstMinimum(subtree.left)
 
+	# Adds a new entry to the map or replaces the value of an existing key
+	def add(self, key, value):
+		# Find the node containing the key, if it exists
+		node = self._bstSearch(key)
+		# If the key is already in the tree, update its value
+		if node is not None:
+			node.value = value
+			return False
+		# Otherwise, add a new entry
+		else:
+			self._root = self._bstInsert(self._root, key, value)
+			self._size += 1
+			return True
+
+	# Helper method that inserts a new item, recursively
+	def _bstInsert(self, subtree, key, value):
+		if subtree is None:
+			subtree = _BSTMapNode(key, value)
+		elif key < subtree.key:
+			subtree.left = self._bstInsert(subtree.left, key, value)
+		elif key > subtree.key:
+			subtree.right = self._bstInsert(subtree.right, key, value)
+
+		return subtree
+
 
 # Storage class for the binary search tree nodes of the map
 class _BSTMapNode:
