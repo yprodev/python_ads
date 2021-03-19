@@ -39,6 +39,113 @@ class AVLMap:
 	def __iter__(self):
 		return _BSTMapIterator(self._root)
 
+	# Rotates the pivot to the right around its left child
+	def _avlRotateRight(self, pivot):
+		C = pivot.left
+		pivot.left = C.right
+		C.right = pivot
+
+		return C
+
+	# Rotates the pivot to the left around its right child
+	def _avlRotateLeft(self, pivot):
+		C = pivot.right
+		pivot.right = C.left
+		C.left = pivot
+
+		return C
+
+	# Rebalance a node when its left subtree is higher
+	def _avlLeftBalance(self, pivot):
+		# Set L to point to the left child of the pivot
+		C = pivot.left
+
+		# See if the balancing is due to case 1
+		if C.bfactor == LEFT_HIGH:
+			pivot.bfactor = EQUAL_HIGH
+			C.bfactor = EQUAL_HIGH
+			pivot = _avlRotateRight(pivot)
+
+			return pivot
+
+		# Otherwise, a balance from the left is due to case 3
+		else:
+			# Change the balance factors
+			if G.bfactor == LEFT_HIGH:
+				pivot.bfactor = RIGHT_HIGH
+				C.bfactor = EQUAL_HIGH
+			elif G.bfactor == EQUAL_HIGH:
+				pivot.bfactor = EQUAL_HIGH
+				C.bfactor = EQUAL_HIGH
+			else: # G.bfactor == RIGHT_HIGH
+				pivot.bfactor = EQUAL_HIGH
+				C.bfactor = LEFT_HIGH
+
+			# All three cases set G's balance factor to equal high
+			G.bfactor = EQUAL_HIGH
+
+			# Perform the double rotation
+			pivot.left = _avlRotateLeft(L) # ??? Where is L?
+			pivot = _avlRotateRight(pivot)
+
+			return pivot
+
+	# Recursive method to handle the insertion into an AVL tree. The
+	# function returns a tuple containing a reference to the root of the
+	# subtree and a boolean to indicate if the subtree grew taller.
+	def _avlInsert(self, subtree, key, newitem):
+		# See if we have found the insertion point
+		if subtree is None:
+			subtree = _AVLTreeNode(key, newitem)
+			taller = True
+		# Is the key already in the tree?
+		elif key == subtree.data:
+			return (subtree, False)
+
+		# See if we need to navigate to the left
+	elif key < subtree.data:
+		(subtree, taller) = _avlInsert(subtree.left, key, newitem)
+
+		# If the subtree grew taller, see if it needs rebalancing
+		if taller:
+			if subtree.bfactor == LEFT_HIGH:
+				subtree.right = _avlLeftBalance(subtree)
+				taller = False
+			elif subtree.bfactor == EQUAL_HIGH:
+				subtree.bfactor = LEFT_HIGH
+				taller = True
+			else: # RIGHT_HIGH
+				subtree.bfactor = EQUAL_HIGH
+				taller = False
+
+	# Otherwise, navigate to the right
+	else:
+		(node, taller) = _avlInsert(subtree.right, key, newitem)
+		# If the subtree grew taller, see if it needs rebalancing
+		if taller:
+			if subtree.bfactor = LEFT_HIGH:
+				subtree.bfactor = EQUAL_HIGH
+				taller = False
+			elif subtree.bfactor == EQUAL_HIGH:
+				subtree.bfactor = RIGHT_HIGH
+				taller = True
+			else: # RIGHT_HIGH
+				subtree.right = _avlRightBalance(subtree)
+				taller = False
+
+	# return the results
+	return (subtree, taller)
+
+
+
+
+
+
+
+
+
+
+
 # Storage class for creating the AVL tree node
 class _AVLMapNode:
 	def __init__(self, key, value):
